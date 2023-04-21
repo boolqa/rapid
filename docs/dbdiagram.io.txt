@@ -1,0 +1,315 @@
+Table user {
+  user_id guid [pk]
+  tenant_id guid [null,
+    ref: > tenant.tenant_id]
+  name nvarchar(50)
+}
+
+Table tenant {
+  tenant_id guid [pk]
+  owner_user_id guid [not null,
+    ref: > user.user_id,
+    note: 'Tenant owner/administrator']
+  name nvarchar(50) [not null]
+}
+
+Table object {
+  object_id guid [pk]
+  user_id guid [not null,
+    ref: > user.user_id]
+//  category_id guid [null,
+//    ref: > category.category_id]
+  type nvarchar(50) [not null]
+  name nvarchar(200) [not null]
+  description nvarchar(1000) [null]
+  created_at dateTime [not null]
+  updated_at dateTime [not null]
+}
+
+//Table category {
+//  category_id guid [pk,
+//   note: 'There must always be a main category']
+//  parent_category_id guid [null, 
+//    ref: > category.category_id]
+//  user_id guid [not null, 
+//    ref: > user.user_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//  name nvarchar(200) [not null]
+//  emoji_icon char(1) [null]
+//  color_hex nvarchar(6) [null]
+//}
+
+//Table custom_field {
+//  custom_field_id guid [pk]
+//  category_id guid [not null, 
+//    ref: > category.category_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//  is_recurse bit [not null]
+//  valid_values nvarchar(10000) [null]
+//  type field_type [not null]
+//  name nvarchar(100) [not null]
+//  hardcode_key nvarchar(20) [null,
+//    note: 'Special hard coded key for link in code']
+//}
+
+//Enum field_type {
+//  string
+//  bool
+//  integer
+//  float
+//  money
+//  time
+//  dateTime
+//  enum
+//  url
+//  resource
+//  barCode
+//}
+
+//Table object_custom_field {
+//  object_custom_field_id guid [pk]
+//  custom_field_id guid [not null, 
+//    ref: > custom_field.custom_field_id]
+//  object_id guid [not null, 
+//    ref: > object.object_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//  value nvarchar(5000)
+//}
+
+//Table tag {
+//  tag_id guid [pk]
+//  category_id guid [null, 
+//    ref: > category.category_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//  is_recurse bit [not null]
+//  color_hex nvarchar(6) [null]
+//  value nvarchar(100) [not null]
+//}
+
+//Table object_tag {
+//  object_id guid [pk, 
+//    ref: > object.object_id]
+//  tag_id guid [pk, 
+//    ref: > tag.tag_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//}
+
+Table link_object {
+  link_object_id guid [pk,
+    ref: > object.object_id]
+  object_from_id guid [
+    ref: > object.object_id,
+    unique]
+  object_to_id guid [
+    ref: > object.object_id,
+    unique]
+  type object_link_type [not null]
+}
+
+Enum object_link_type {
+  linked
+//  attachment
+}
+
+Table shared_object {
+  object_id guid [pk,
+    ref: > object.object_id]
+  target_object_id guid [null,
+    ref: > object.object_id]
+  access_user_id guid [
+    ref: > user.user_id]
+  mode shared_mode [not null]
+}
+
+Enum shared_mode {
+  denied
+  read
+  write [note: 'Include read']
+  share [note: 'Include read, write and share']
+}
+
+//Table shared_category {
+//  category_id guid [pk, 
+//    ref: > category.category_id]
+//  access_user_id guid [pk, 
+//    ref: > user.user_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//  is_recurse bit [not null]
+//  mode shared_mode [not null]
+//}
+
+//Table resource_object {
+//  resource_object_id guid [pk, 
+//    ref: - object.object_id]
+//  preview_resource_id guid [null, 
+//    ref: - resource_object.resource_object_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//  type resource_type [not null]
+//}
+
+//Enum resource_type {
+//  text
+//  url
+//  image
+//  sound
+//  document
+//  file
+//  other
+//}
+
+//Table asset_storage_object {
+//  asset_storage_object_id guid [pk, 
+//    ref: - object.object_id]
+//  parent_asset_storage_object_id guid [null, 
+//    ref: > asset_storage_object.asset_storage_object_id]
+//  container_asset_object_id guid [null,
+//    ref: > asset_object.asset_object_id,
+//    note: 'An object that is storage, such as a box']
+//  image_id guid [null, 
+//    ref: > resource_object.resource_object_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//}
+
+//Table asset_object {
+//  asset_object_id guid [pk, 
+//    ref: - object.object_id]
+//  asset_storage_id guid [null, 
+//    ref: > asset_storage_object.asset_storage_object_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//  image_id guid [null, 
+//    ref: > resource_object.resource_object_id]
+//  amount real
+//}
+
+//Table secret_object {
+//  secret_object_id guid [pk, 
+//    ref: - object.object_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//  login nvarchar(200) [null]
+//  value nvarchar(1000) [null]
+//  old_value nvarchar(1000) [null]
+//  email nvarchar(200) [null]
+//  url nvarchar(2000) [null]
+//  expired datetime [null]
+//  note nvarchar(10000) [null]
+//}
+
+Table group_object {
+  group_object_id guid [pk,
+    ref: - object.object_id]
+//  type group_type [not null]
+}
+
+//Enum group_type {
+//  custom
+//  checkList
+//}
+
+//Table global_variable_object {
+//  global_variable_object_id guid [pk, 
+//    ref: - object.object_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//  value nvarchar(2000) [not null]
+//  type variable_type [not null]
+//}
+
+//Enum variable_type {
+//  string
+//  bool
+//  integer
+//  float
+//  time
+//  dateTime
+//  enum
+//}
+
+Table entity_history {
+  entity_history_id guid [pk]
+  entity_id guid
+  type nvarchar(50) [not null]
+  field_name nvarchar(50) [not null]
+  old_value nvarchar(MAX) [null]
+  new_value nvarchar(MAX) [null]
+}
+
+Enum object_type {
+  object
+  category
+  tag
+  custom
+}
+
+//Table widget_object {
+//  widget_object_id guid [pk, 
+//    ref: - object.object_id]
+//  tenant_id guid [not null, 
+//    ref: > tenant.tenant_id]
+//  type_id nvarchar(100) [not null]
+//  position nvarchar(20) [not null]
+//  json_settings nvarchar(10000) [null]
+//}
+
+//table reminder_object {
+//  reminder_object_id guid [pk,
+//    ref: - object.object_id]
+//  target_object_id guid [null,
+//    ref: > object.object_id]
+//  target_user_id guid [not null, 
+//    ref: > user.user_id]
+//  tenant_id guid [not null,
+//    ref: > tenant.tenant_id]
+//  text nvarchar(2000)
+//}
+
+//table notification_object {
+//  reminder_object_id guid [pk,
+//    ref: - object.object_id]
+//  tenant_id guid [not null,
+//    ref: > tenant.tenant_id]
+//  state notification_state [not null]
+//  text nvarchar(2000) [null]
+//}
+
+//Enum notification_state {
+//  new
+//  readed
+//}
+
+table plugin {
+  plugin_id guid [pk]
+  plugin_key nvarchar(255)
+  name nvarchar(255)
+  version nvarchar(30)
+}
+
+//table custom_object {
+//  custom_object_id guid [pk,
+//    ref: - object.object_id]
+//  field guid
+//}
+
+table setting_object {
+  setting_object_id guid [pk,
+    ref: - object.object_id]
+  key nvarchar(255) [unique]
+  setting_type setting_type [not null]
+  value_type variable_type [not null]
+  value nvarchar(5000) [null]
+}
+
+Enum setting_type {
+  system
+  user
+  plugin
+}
