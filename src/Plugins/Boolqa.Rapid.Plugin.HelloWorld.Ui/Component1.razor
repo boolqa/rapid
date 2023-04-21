@@ -1,0 +1,12 @@
+﻿<div class="my-component">
+    <span>This component is defined in the <strong>Boolqa.Rapid.Plugin.HelloWorld.Ui</strong> library.</span>
+
+    <button class="btn btn-primary" @onclick="Click">Add test object from plugin ui component</button>
+
+    @code {
+        private async Task Click()
+        {
+            await ForTest.Instance.CreateTestObject("component");
+        }
+    }
+</div>

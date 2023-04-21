@@ -1,0 +1,47 @@
+﻿using System.Collections.ObjectModel;
+using System.Reflection;
+using Boolqa.Rapid.PluginCore.Models;
+using McMaster.NETCore.Plugins;
+
+namespace Boolqa.Rapid.App.PluginCore.Infrastructures;
+
+/// <summary>
+/// Конекст загрузки плагина.
+/// </summary>
+public record PluginLoadContext
+{
+    /// <summary>
+    /// Путь до папки плагина.
+    /// </summary>
+    public required string FolderPath { get; init; }
+
+    /// <summary>
+    /// Имя папки плагина.
+    /// </summary>
+    public required string FolderName { get; init; }
+
+    /// <summary>
+    /// Корневой конфиг плагина.
+    /// </summary>
+    public required IConfigurationRoot ConfigurationRoot { get; init; }
+
+    /// <summary>
+    /// Десериализованные базовые настройки плагина.
+    /// </summary>
+    public required PluginSettings Settings { get; init; }
+
+    /// <summary>
+    /// Отделена ли UI сборка от основной сборкой (backend) с логикой.
+    /// </summary>
+    public required bool IsUiSeparated { get; init; }
+
+    /// <summary>
+    /// Загрузчик плагина.
+    /// </summary>
+    public required PluginLoader Loader { get; init; }
+
+    /// <summary>
+    /// Загруженные сборки плагина.
+    /// </summary>
+    public required ReadOnlyCollection<Assembly> LoadedAssemblies { get; init; }
+}

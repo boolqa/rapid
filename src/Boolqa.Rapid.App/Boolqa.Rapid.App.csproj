@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>2cb27c2f-0622-4ec3-a33f-ef45d107b02d</UserSecretsId>
+    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" />
+    <PackageReference Include="McMaster.NETCore.Plugins.Mvc" Version="1.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+    <PackageReference Include="SimpleInjector" Version="5.4.1" />
+    <PackageReference Include="SimpleInjector.Integration.ServiceCollection" Version="5.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Boolqa.Infrastructures.CSharp\Boolqa.Infrastructures.CSharp.csproj" />
+    <ProjectReference Include="..\Boolqa.Rapid.PluginCore.Ui\Boolqa.Rapid.PluginCore.Ui.csproj" />
+    <ProjectReference Include="..\Boolqa.Rapid.PluginCore\Boolqa.Rapid.PluginCore.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,74 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Rapid.PluginCore", "Boolqa.Rapid.PluginCore\Boolqa.Rapid.PluginCore.csproj", "{94A4CBD8-143E-4F95-832C-59CAF34940E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{7C3D654A-3D0E-42A8-8C73-F3D9A765F17E}"
+	ProjectSection(SolutionItems) = preProject
+		Docs\plugins_readme.txt = Docs\plugins_readme.txt
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Rapid.Plugin.HelloWorld", "Plugins\Boolqa.Rapid.Plugin.HelloWorld\Boolqa.Rapid.Plugin.HelloWorld.csproj", "{146C420E-3F00-473F-942A-91CA643499F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{3EF02D42-A79E-4A75-BCDB-C79C185423F6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Rapid.PluginCore.Ui", "Boolqa.Rapid.PluginCore.Ui\Boolqa.Rapid.PluginCore.Ui.csproj", "{49BD6F31-43B0-44E2-86BD-E54016B55A7C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Rapid.App", "Boolqa.Rapid.App\Boolqa.Rapid.App.csproj", "{9DBF58FB-961F-420E-80CA-462C4690E35A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{146C420E-3F00-473F-942A-91CA643499F6} = {146C420E-3F00-473F-942A-91CA643499F6}
+		{A37B920B-2720-40A6-944F-D80878DF0D48} = {A37B920B-2720-40A6-944F-D80878DF0D48}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HelloWorld", "HelloWorld", "{EFFEC0C6-549A-4960-91A8-50BE2C171767}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Rapid.Plugin.HelloWorld.Ui", "Plugins\Boolqa.Rapid.Plugin.HelloWorld.Ui\Boolqa.Rapid.Plugin.HelloWorld.Ui.csproj", "{A37B920B-2720-40A6-944F-D80878DF0D48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boolqa.Infrastructures.CSharp", "Boolqa.Infrastructures.CSharp\Boolqa.Infrastructures.CSharp.csproj", "{BD8B6A94-6255-4D4B-9D57-B5FABEC21C1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94A4CBD8-143E-4F95-832C-59CAF34940E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94A4CBD8-143E-4F95-832C-59CAF34940E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94A4CBD8-143E-4F95-832C-59CAF34940E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94A4CBD8-143E-4F95-832C-59CAF34940E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{146C420E-3F00-473F-942A-91CA643499F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{146C420E-3F00-473F-942A-91CA643499F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{146C420E-3F00-473F-942A-91CA643499F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{146C420E-3F00-473F-942A-91CA643499F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49BD6F31-43B0-44E2-86BD-E54016B55A7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49BD6F31-43B0-44E2-86BD-E54016B55A7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49BD6F31-43B0-44E2-86BD-E54016B55A7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49BD6F31-43B0-44E2-86BD-E54016B55A7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DBF58FB-961F-420E-80CA-462C4690E35A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DBF58FB-961F-420E-80CA-462C4690E35A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DBF58FB-961F-420E-80CA-462C4690E35A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DBF58FB-961F-420E-80CA-462C4690E35A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A37B920B-2720-40A6-944F-D80878DF0D48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A37B920B-2720-40A6-944F-D80878DF0D48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A37B920B-2720-40A6-944F-D80878DF0D48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A37B920B-2720-40A6-944F-D80878DF0D48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD8B6A94-6255-4D4B-9D57-B5FABEC21C1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD8B6A94-6255-4D4B-9D57-B5FABEC21C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD8B6A94-6255-4D4B-9D57-B5FABEC21C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD8B6A94-6255-4D4B-9D57-B5FABEC21C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{146C420E-3F00-473F-942A-91CA643499F6} = {EFFEC0C6-549A-4960-91A8-50BE2C171767}
+		{9DBF58FB-961F-420E-80CA-462C4690E35A} = {3EF02D42-A79E-4A75-BCDB-C79C185423F6}
+		{EFFEC0C6-549A-4960-91A8-50BE2C171767} = {7C3D654A-3D0E-42A8-8C73-F3D9A765F17E}
+		{A37B920B-2720-40A6-944F-D80878DF0D48} = {EFFEC0C6-549A-4960-91A8-50BE2C171767}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A4E3E1E-4147-4FCA-858B-F9CCC93B22D7}
+	EndGlobalSection
+EndGlobal

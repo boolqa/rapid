@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+	<OutputPath>..\..\Boolqa.Rapid.App\bin\$(Configuration)\$(TargetFramework)\plugins\$(MSBuildProjectName.Replace(".Ui", ""))</OutputPath>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Boolqa.Rapid.Plugin.HelloWorld\Boolqa.Rapid.Plugin.HelloWorld.csproj" />
+  </ItemGroup>
+
+</Project>
