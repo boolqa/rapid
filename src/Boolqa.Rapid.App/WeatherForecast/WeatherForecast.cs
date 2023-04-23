@@ -1,4 +1,4 @@
-namespace Boolqa.Rapid.App.Data
+namespace Boolqa.Rapid.App.WeatherForecast
 {
     public class WeatherForecast
     {
