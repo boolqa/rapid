@@ -154,7 +154,8 @@ public class PluginLoaderManager
             configure: c =>
             {
                 // Тут можно задать AssemblyLoadContext, если буду проблемы с загрузкой
-                // плагинов которые ссылаются на плагины
+                // плагинов которые ссылаются на плагины. Читай доку DotNetCorePlugins поиск по:
+                // Overriding the Default Load Context
 
                 // FIXPROMBLEM: Если есть непонятные проблемы взаимодействия логики ядра с плагинами, раскоментируй
                 // эту строку Если это поможет, значит надо вычислить и доабвить нужные типы в _sharedTypes
