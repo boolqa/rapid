@@ -22,10 +22,14 @@ services.AddSingleton<WeatherForecastService>();
 var pluginManager = new PluginLoaderManager();
 var plugins = pluginManager.LoadPlugins();
 
-builder.Services.AddScoped<Func<MainDbContext>>((x) =>
+siContainer.Register<MainDbContextFactory>();
+siContainer.Register(() => new DynamicEntityRegister(plugins.SelectMany(p => p.LoadedAssemblies)));
+siContainer.Register(() =>
 {
-    var assablies = plugins.SelectMany(p => p.LoadedAssemblies);
-    return () => new MainDbContext(assablies!);
+    using var scope = AsyncScopedLifestyle.BeginScope(siContainer);
+    var entityRegister = scope.GetRequiredService<DynamicEntityRegister>();
+
+    return new MainDbContextFactory().CreateNew(entityRegister);
 });
 
 mvcBuilder.AddUiPlugins(plugins);
@@ -67,16 +71,6 @@ var core = new Core(siContainer);
 var pluginHostManager = new PluginHostManager(plugins, core);
 
 await pluginHostManager.Initialize();
-
-using (var context = scope.ServiceProvider.GetService<Func<MainDbContext>>()?.Invoke())
-{
-    context.Database.EnsureDeleted();
-    context.Database.Migrate();
-}
-
-scope.Dispose();
-
-app.Services.UseSimpleInjector(siContainer);
 
 siContainer.Verify();
 siContainer.ApplyMigrations<MainDbContext>(isResetDb: true);
