@@ -3,8 +3,6 @@ using Boolqa.Rapid.PluginCore;
 using Boolqa.Rapid.PluginCore.Models;
 using McMaster.NETCore.Plugins;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace Boolqa.Rapid.App.PluginCore.Infrastructures;
 
@@ -22,7 +20,12 @@ public class PluginLoaderManager
     public PluginLoaderManager()
     {
         _pluginsFolder = Path.Combine(AppContext.BaseDirectory, "plugins");
-        _sharedTypes = new Type[] { typeof(IPlugin), typeof(IServiceCollection), typeof(IEntityTypeConfiguration<>) };
+        _sharedTypes = new Type[]
+        {
+            typeof(IPlugin),
+            typeof(IServiceCollection),
+            typeof(IEntityTypeConfiguration<>)
+        };
     }
 
     /// <summary>
@@ -77,8 +80,8 @@ public class PluginLoaderManager
             throw new InvalidOperationException($"Plugin load config failed");
         }
 
-        var settings = rootConfig.Get<PluginSettings>()
-            ?? throw new InvalidOperationException("PluginSettings parsing failed");
+        var settings = rootConfig.Get<PluginSettings>() ??
+            throw new InvalidOperationException("PluginSettings parsing failed");
 
         settings.PluginDll = settings.PluginDll.Replace(".dll", "", StringComparison.OrdinalIgnoreCase);
         settings.SeparateUiDll = settings.SeparateUiDll?.Replace(".dll", "", StringComparison.OrdinalIgnoreCase);
@@ -92,12 +95,12 @@ public class PluginLoaderManager
     /// <param name="pluginConfig">Конфиг плагина, загруженный из папки плагина.</param>
     private PluginLoadContext LoadPlugin(PluginConfig pluginConfig)
     {
-        var settings = pluginConfig.Settings;
         PluginLoader loader;
+
+        var settings = pluginConfig.Settings;
         var loadedAssemblies = new List<Assembly>(2);
 
-        var isUiSeparated = settings.PluginType == PluginType.Together 
-            && !string.IsNullOrEmpty(settings.SeparateUiDll);
+        var isUiSeparated = settings.PluginType == PluginType.Together && !string.IsNullOrEmpty(settings.SeparateUiDll);
 
         if (isUiSeparated)
         {
@@ -162,12 +165,7 @@ public class PluginLoaderManager
                 // c.PreferSharedTypes = true;
             });
 
-        if (loader == null)
-        {
-            throw new InvalidOperationException($"Plugin loader not created");
-        }
-
-        return loader;
+        return loader ?? throw new InvalidOperationException("Plugin loader not created");
     }
 
     private string GetDllPath(string dllName, PluginConfig pluginLoadSetting) =>

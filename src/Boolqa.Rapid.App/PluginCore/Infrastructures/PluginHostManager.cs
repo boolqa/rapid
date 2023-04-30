@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Boolqa.Rapid.PluginCore;
+﻿using Boolqa.Rapid.PluginCore;
 
 namespace Boolqa.Rapid.App.PluginCore.Infrastructures;
 
@@ -13,8 +12,10 @@ public class PluginHostManager
 
     public PluginHostManager(IEnumerable<PluginLoadContext> pluginLoadInfos, Core core)
     {
-        _pluginLoadInfos = pluginLoadInfos.Where(p => p.Loader != null)
+        _pluginLoadInfos = pluginLoadInfos
+            .Where(p => p.Loader != null)
             .ToArray();
+
         _pluginHosts = new List<PluginHost>(_pluginLoadInfos.Count);
         _core = core;
     }
@@ -44,9 +45,10 @@ public class PluginHostManager
 
     private PluginHost CreatePluginHost(PluginLoadContext pluginInfo)
     {
-        var pluginTypes = pluginInfo.LoadedAssemblies.SelectMany(x => x.GetTypes())
-                .Where(t => typeof(IPlugin).IsAssignableFrom(t) && !t.IsAbstract)
-                .ToArray();
+        var pluginTypes = pluginInfo.LoadedAssemblies
+            .SelectMany(x => x.GetTypes())
+            .Where(t => typeof(IPlugin).IsAssignableFrom(t) && !t.IsAbstract)
+            .ToArray();
 
         if (pluginTypes == null || !pluginTypes.Any())
         {
@@ -62,8 +64,8 @@ public class PluginHostManager
 
         var pluginType = pluginTypes.First();
 
-        var plugin = (IPlugin?)Activator.CreateInstance(pluginType, _core)
-            ?? throw new InvalidOperationException($"IPlugin create instance failed '{pluginInfo.Settings?.PluginName}'");
+        var plugin = (IPlugin?)Activator.CreateInstance(pluginType, _core) ??
+            throw new InvalidOperationException($"IPlugin create instance failed '{pluginInfo.Settings?.PluginName}'");
 
         Console.WriteLine($"Created plugin instance '{pluginInfo.Settings?.PluginName}'");
 
