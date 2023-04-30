@@ -19,14 +19,6 @@ public class Plugin : IPlugin
         Console.WriteLine("Initialized Boolqa.Rapid.Plugin.HelloWorld");
     }
 
-    // todo: подумать над тем, как правильно вызвать и передать контейнер
-    public async Task Configure()
-    {
-        //_core.DataContextConfigure(typeof(HWObject));
-
-        Console.WriteLine("Configured Boolqa.Rapid.Plugin.HelloWorld");
-    }
-
     public async Task Run()
     {
         Console.WriteLine("runned Boolqa.Rapid.Plugin.HelloWorld");

@@ -32,16 +32,6 @@ public class PluginHostManager
         }
     }
 
-    public async Task Configure()
-    {
-        foreach (var pluginHost in _pluginHosts)
-        {
-            await pluginHost.Plugin.Configure();
-
-            Console.WriteLine($"Configured plugin '{pluginHost.PluginInfo?.Settings?.PluginName}'");
-        }
-    }
-
     public async Task Run()
     {
         foreach (var pluginHost in _pluginHosts)
