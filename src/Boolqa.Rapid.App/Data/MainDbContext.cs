@@ -1,30 +1,11 @@
-﻿using System;
-using System.Reflection;
-using System.Text;
-using Boolqa.Rapid.PluginCore.Data;
+﻿using Boolqa.Rapid.PluginCore.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Boolqa.Rapid.App.Data;
 
 public partial class MainDbContext : DbContext
 {
-    private readonly IEnumerable<Assembly> _pluginAssemblies;
-
-    public MainDbContext()
-    {
-        _pluginAssemblies = new Assembly[0];
-    }
-
-    // todo: список сборок вынести в отдельный класс и этот класс передавать сюда (объект динамической привязки сущностей из плагинов)
-    public MainDbContext(IEnumerable<Assembly> assemblies)
-    {
-        _pluginAssemblies = assemblies;
-    }
-
-    public MainDbContext(DbContextOptions<MainDbContext> options)
-        : base(options)
-    {
-    }
+    #region DbSets
 
     public virtual DbSet<EntityHistory> EntityHistories { get; set; }
 
@@ -43,6 +24,29 @@ public partial class MainDbContext : DbContext
     public virtual DbSet<Tenant> Tenants { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
+    #endregion
+
+    private readonly DynamicEntityRegister? _entityRegister;
+    
+    /// <summary>
+    /// Создаёт контекст базы данных.
+    /// </summary>
+    public MainDbContext() { }
+    
+    /// <summary>
+    /// Создаёт контекст базы данных.
+    /// </summary>
+    /// <remarks>Используется только для первичной конфигарации контекста!</remarks>
+    /// <param name="entityRegister">Объект динамической регистрации сущностей используемых в плагинах.</param>
+    /// <param name="options">Параметры для создаваемого контекста.</param>
+    public MainDbContext(DynamicEntityRegister entityRegister, DbContextOptions<MainDbContext> options)
+        : base(options)
+    {
+        _entityRegister = entityRegister;
+    }
+    
+    #region Overrides methods
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -275,8 +279,15 @@ public partial class MainDbContext : DbContext
         CreateStartData(modelBuilder);
         OnModelCreatingPartial(modelBuilder);
 
-        modelBuilder.RegisterAllEntities<CoreObject>(_pluginAssemblies.ToArray());
+        if (_entityRegister is null)
+        {
+            throw new InvalidOperationException("Unable to register entities in plugins!");
+        }
+
+        _entityRegister.RegisterEntitiesInPlugins<CoreObject>(modelBuilder);
     }
+
+    #endregion
 
     private void CreateStartData(ModelBuilder modelBuilder)
     {
@@ -304,25 +315,4 @@ public partial class MainDbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-}
-
-// todo: вынести в отдельный файл (объект динамической привязки сущностей из плагинов)
-public static class ModelBuilderExtensions
-{
-    public static void RegisterAllEntities<BaseModel>(this ModelBuilder modelBuilder, params Assembly[] assemblies)
-    {
-        var types = assemblies
-            .SelectMany(a => a.GetExportedTypes())
-            .Where(c => c.IsClass && !c.IsAbstract && c.IsPublic && typeof(BaseModel).IsAssignableFrom(c));
-
-        foreach (var type in types)
-        {
-            _ = modelBuilder.Entity(type);
-        }
-
-        foreach (var asm in assemblies)
-        {
-            modelBuilder.ApplyConfigurationsFromAssembly(asm);
-        }
-    }
 }
