@@ -1,21 +1,19 @@
 ﻿using Boolqa.Rapid.App.Data;
 using Boolqa.Rapid.PluginCore;
+using SimpleInjector;
+using SimpleInjector.Lifestyles;
 
 namespace Boolqa.Rapid.App.PluginCore;
 
 public class Core : ICore
 {
-    // todo: написать факторку для генерации контекста
-    private readonly Func<MainDbContext> _contextFactory;
+    private readonly MainDbContextFactory _contextFactory;
 
-    public Core(Func<MainDbContext> contextFactory)
+    public Core(Container container)
     {
-        _contextFactory = contextFactory;
+        using var scope = AsyncScopedLifestyle.BeginScope(container);
+        _contextFactory = scope.GetRequiredService<MainDbContextFactory>();
     }
 
-    public IDataContext GetNewDataContext()
-    {
-        var dataContext = new DataContext(_contextFactory());
-        return dataContext;
-    }
+    public IDataContext GetNewDataContext() => new DataContext(_contextFactory.CreateNew());
 }

@@ -2,24 +2,22 @@ using Boolqa.Rapid.App;
 using Boolqa.Rapid.App.Data;
 using Boolqa.Rapid.App.PluginCore;
 using Boolqa.Rapid.App.PluginCore.Infrastructures;
-using Boolqa.Rapid.PluginCore;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.EntityFrameworkCore;
-using McMaster.NETCore.Plugins;
-using Microsoft.Extensions.DependencyInjection;
+using Boolqa.Rapid.App.WeatherForecast;
 using SimpleInjector;
+using SimpleInjector.Lifestyles;
 
 var siContainer = new Container();
+
 siContainer.Options.DefaultLifestyle = Lifestyle.Scoped;
+siContainer.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
 // Add services to the container.
-var mvcBuilder = builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
-
+var mvcBuilder = services.AddRazorPages();
+services.AddServerSideBlazor();
+services.AddSingleton<WeatherForecastService>();
 
 var pluginManager = new PluginLoaderManager();
 var plugins = pluginManager.LoadPlugins();
@@ -29,22 +27,19 @@ builder.Services.AddScoped<Func<MainDbContext>>((x) =>
     var assablies = plugins.SelectMany(p => p.LoadedAssemblies);
     return () => new MainDbContext(assablies!);
 });
-builder.Services.AddScoped<Core>();
 
 mvcBuilder.AddUiPlugins(plugins);
 
-// Sets up the basic configuration that for integrating Simple Injector with
-// ASP.NET Core by setting the DefaultScopedLifestyle, and setting up auto
-// cross wiring.
-builder.Services.AddSimpleInjector(siContainer, options =>
+// см. страничку на вики SI для Blazor: https://docs.simpleinjector.org/en/latest/blazorintegration.html
+services.AddServerSideBlazor();
+services.AddSimpleInjector(siContainer, options =>
 {
-    // AddAspNetCore() wraps web requests in a Simple Injector scope and
-    // allows request-scoped framework services to be resolved.
-    //options.AddAspNetCore().AddControllerActivation();
+    // If you plan on adding AspNetCore as well, change the
+    // ServiceScopeReuseBehavior to OnePerNestedScope as follows:
+    // options.AddAspNetCore(ServiceScopeReuseBehavior.OnePerNestedScope);
 
-    // Optionally, allow application components to depend on the non-generic
-    // ILogger (Microsoft.Extensions.Logging) or IStringLocalizer
-    // (Microsoft.Extensions.Localization) abstractions.
+    //options.AddServerSideBlazor(typeof(Program).Assembly);
+
     //options.AddLogging();
     //options.AddLocalization();
 });
@@ -60,19 +55,17 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseRouting();
+
+app.Services.UseSimpleInjector(siContainer);
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-// todo: создавать Core вручную и передавать в него контейнер, он сом внутри разрулит по зависямостям
-var scope = app.Services.CreateScope();
-var core = scope.ServiceProvider.GetService<Core>();
+var core = new Core(siContainer);
+var pluginHostManager = new PluginHostManager(plugins, core);
 
-var pluginHostManager = new PluginHostManager(plugins, core!);
 await pluginHostManager.Initialize();
 
 using (var context = scope.ServiceProvider.GetService<Func<MainDbContext>>()?.Invoke())
