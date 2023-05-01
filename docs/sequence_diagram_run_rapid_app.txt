@@ -1,0 +1,54 @@
+# was used https://sequencediagram.org/
+
+title Run Rapid app
+
+participant App
+participant Core
+participant Plugin
+participant Database
+
+group PluginLoaderManager
+App->App: Load all plugins
+end
+
+App->App: Add UI plugins
+App-->*Core:<<create>>
+
+group PluginHostManager
+
+App->Plugin: Initialize plugins
+activate Plugin
+space 1
+deactivateafter Plugin
+
+end
+
+group MainDbContext
+
+space 1
+activate App
+App->App: Register entities
+App->Plugin: Register entities
+activate Plugin
+space 1
+deactivateafter Plugin
+deactivateafter App
+
+end
+
+alt case 1
+App-:2>Database: Apply migrations
+else case 2
+App-:2>Database: Initialize db context
+end
+
+group PluginHostManager
+
+App->Plugin: Run plugins
+activate Plugin
+space 1
+deactivateafter Plugin
+
+end
+
+box over App: Run app
