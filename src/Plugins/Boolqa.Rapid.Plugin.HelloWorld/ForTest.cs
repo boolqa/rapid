@@ -26,7 +26,7 @@ public class ForTest
     {
         using var data = _core.GetNewDataContext();
 
-        var createdObject = data.CoreObjectService.Value.Add(new PluginCore.Data.CoreObject(null,
+        var createdObject = data.CoreObjectService.Value.Add(new HWObject(null,
             new Guid("63D26DF9-0E3F-4E00-8187-1A5F7B000001"), "object", $"Test object HelloWorld {name}")
         {
             Description = "Test object descript"

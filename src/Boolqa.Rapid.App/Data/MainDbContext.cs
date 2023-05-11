@@ -295,9 +295,8 @@ public partial class MainDbContext : DbContext
         var mainTenantId = new Guid("63D26DF9-0E3F-4E00-8187-1A5F7B000002");
         var sharedTestId = new Guid("63D26DF9-0E3F-4E00-8187-1A5F7B000003");
 
-        modelBuilder.Entity<User>().HasData(new User
+        modelBuilder.Entity<User>().HasData(new User(adminUserId)
         {
-            UserId = adminUserId,
             Name = "Admin"
         });
 
@@ -308,10 +307,11 @@ public partial class MainDbContext : DbContext
             OwnerUserId = adminUserId
         });
 
-        modelBuilder.Entity<SharedObject>().HasData(new SharedObject(sharedTestId, adminUserId, "Test share")
-        {
+        // todo: исправить создание объекта SharedObject
+        //modelBuilder.Entity<SharedObject>().HasData(new SharedObject(sharedTestId, adminUserId, "Test share")
+        //{
 
-        });
+        //});
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
