@@ -1,8 +1,10 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Boolqa.Rapid.PluginCore;
 using Boolqa.Rapid.PluginCore.Models;
 using McMaster.NETCore.Plugins;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace Boolqa.Rapid.App.PluginCore.Infrastructures;
 
@@ -17,9 +19,9 @@ public class PluginLoaderManager
 
     private readonly Type[] _sharedTypes;
     private readonly IConfiguration _configuration;
-    private readonly IHostEnvironment _hostEnvironment;
+    private readonly IWebHostEnvironment _hostEnvironment;
 
-    public PluginLoaderManager(IConfiguration configuration, IHostEnvironment hostEnvironment)
+    public PluginLoaderManager(IConfiguration configuration, IWebHostEnvironment hostEnvironment)
     {
         _pluginsFolder = Path.Combine(AppContext.BaseDirectory, "plugins");
         _sharedTypes = new Type[]
@@ -65,6 +67,17 @@ public class PluginLoaderManager
             pluginContexts.Add(pluginContext);
         }
 
+        // todo: возможно стоит вынести на уровень выше в метод Use..., т.к логика уровня приложения, а не загрузчика плагинов
+        var resourcesProviders = pluginContexts.Where(p => p.ResourceFileProvider != null)
+            .Select(p => p.ResourceFileProvider)
+            .ToList();
+
+        if (resourcesProviders != null)
+        {
+            var providers = resourcesProviders.Prepend(_hostEnvironment.WebRootFileProvider);
+            _hostEnvironment.WebRootFileProvider = new CompositeFileProvider(providers!);
+        }
+
         return pluginContexts;
     }
 
@@ -88,6 +101,8 @@ public class PluginLoaderManager
         {
             foreach (var path in pluginsPaths)
             {
+                // todo: тут возможно надо будет более очевидным способом формировать путь,
+                // например от wwwroot подняться вверх на 1 директорию
                 var fullPath = Path.GetFullPath(path);
                 pluginFolders.Add(fullPath);
             }
@@ -106,7 +121,7 @@ public class PluginLoaderManager
         var rootConfig = new ConfigurationBuilder()
             .SetBasePath(pluginFolderPath)
             .AddJsonFile("pluginsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile("pluginsettings.Development.json", optional: true, reloadOnChange: true)
+            .AddJsonFile($"pluginsettings.{_hostEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true)
             .Build();
 
         if (rootConfig == null)
@@ -130,6 +145,7 @@ public class PluginLoaderManager
     private PluginLoadContext LoadPlugin(PluginConfig pluginConfig)
     {
         PluginLoader loader;
+        Assembly mainLoadedAssembly;
 
         var settings = pluginConfig.Settings;
         var loadedAssemblies = new List<Assembly>(2);
@@ -140,7 +156,8 @@ public class PluginLoaderManager
         {
             loader = CreatePluginLoader(settings.SeparateUiDll!, pluginConfig);
             // Грузим UI сборку, т.к она считается основной, ибо зависит от backend dll
-            loadedAssemblies.Add(loader.LoadDefaultAssembly());
+            mainLoadedAssembly = loader.LoadDefaultAssembly();
+            loadedAssemblies.Add(mainLoadedAssembly);
             // Грузим backend сборку, чтобы запустить плагин через IPlugin
             var backendDllPath = GetDllPath(settings.PluginDll, pluginConfig);
             loadedAssemblies.Add(loader.LoadAssemblyFromPath(backendDllPath));
@@ -149,9 +166,14 @@ public class PluginLoaderManager
         else
         {
             loader = CreatePluginLoader(settings.PluginDll, pluginConfig);
-            loadedAssemblies.Add(loader.LoadDefaultAssembly());
+            mainLoadedAssembly = loader.LoadDefaultAssembly();
+            loadedAssemblies.Add(mainLoadedAssembly);
             // Возможно где-то тут надо будет подгружать сборки для реализации плагинов зависящих от других плагинов
         }
+
+        // todo: тут дописать для прод режима, чтобы создавало провайдер до wwwroot папки плагина
+        var assetLoader = new PluginWebAssetsLoader();
+        var resourceProvider = assetLoader.LoadStaticWebAssets(_hostEnvironment, _configuration, mainLoadedAssembly);
 
         var pluginContext = new PluginLoadContext()
         {
@@ -161,7 +183,9 @@ public class PluginLoaderManager
             Settings = pluginConfig.Settings,
             IsUiSeparated = isUiSeparated,
             Loader = loader,
-            LoadedAssemblies = loadedAssemblies.AsReadOnly()
+            MainLoadedAssembly = mainLoadedAssembly,
+            LoadedAssemblies = loadedAssemblies.AsReadOnly(),
+            ResourceFileProvider = resourceProvider
         };
 
         return pluginContext;

@@ -41,7 +41,17 @@ public record PluginLoadContext
     public required PluginLoader Loader { get; init; }
 
     /// <summary>
+    /// Основная сборка являющаяся точкой входа в плагин.
+    /// </summary>
+    public required Assembly MainLoadedAssembly { get; init; }
+
+    /// <summary>
     /// Загруженные сборки плагина.
     /// </summary>
     public required ReadOnlyCollection<Assembly> LoadedAssemblies { get; init; }
+
+    /// <summary>
+    /// Провайдер для загрузки ресурсов плагина.
+    /// </summary>
+    internal ManifestStaticWebAssetFileProvider? ResourceFileProvider { get; init; }
 }

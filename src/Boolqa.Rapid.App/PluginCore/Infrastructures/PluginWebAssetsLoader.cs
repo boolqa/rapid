@@ -11,33 +11,39 @@ public class PluginWebAssetsLoader
     /// </summary>
     /// <param name="environment">The application <see cref="IWebHostEnvironment"/>.</param>
     /// <param name="configuration">The host <see cref="IConfiguration"/>.</param>
-    public static void UseStaticWebAssets(IWebHostEnvironment environment, IConfiguration configuration)
+    internal ManifestStaticWebAssetFileProvider? LoadStaticWebAssets(IWebHostEnvironment environment,
+        IConfiguration configuration, Assembly assembly)
     {
-        var manifest = ResolveManifest(environment, configuration);
-        if (manifest != null)
+        var manifest = ResolveManifest(environment, configuration, assembly);
+        if (manifest == null)
         {
-            using (manifest)
-            {
-                UseStaticWebAssetsCore(environment, manifest);
-            }
+            return null;
+        }
+
+        using (manifest)
+        {
+            return GetStaticWebAssetsCore(environment, manifest);
         }
     }
 
-    internal static void UseStaticWebAssetsCore(IWebHostEnvironment environment, Stream manifest)
+    internal static ManifestStaticWebAssetFileProvider GetStaticWebAssetsCore(IWebHostEnvironment environment, Stream manifest)
     {
         var staticWebAssetManifest = ManifestStaticWebAssetFileProvider.StaticWebAssetManifest.Parse(manifest);
         var provider = new ManifestStaticWebAssetFileProvider(
             staticWebAssetManifest,
             (contentRoot) => new PhysicalFileProvider(contentRoot));
 
-        environment.WebRootFileProvider = new CompositeFileProvider(new[] { provider, environment.WebRootFileProvider });
+        //environment.WebRootFileProvider = new CompositeFileProvider(new[] { provider, environment.WebRootFileProvider });
+        return provider;
     }
 
-    internal static Stream? ResolveManifest(IWebHostEnvironment environment, IConfiguration configuration)
+    internal static Stream? ResolveManifest(IWebHostEnvironment environment, IConfiguration configuration,
+        Assembly assembly)
     {
         try
         {
-            var candidate = configuration[WebHostDefaults.StaticWebAssetsKey] ?? ResolveRelativeToAssembly(environment);
+            var candidate = configuration[WebHostDefaults.StaticWebAssetsKey] ?? 
+                ResolveRelativeToAssembly(assembly);
             if (candidate != null && File.Exists(candidate))
             {
                 return File.OpenRead(candidate);
@@ -56,15 +62,26 @@ public class PluginWebAssetsLoader
 
     [UnconditionalSuppressMessage("SingleFile", "IL3000:Assembly.Location",
         Justification = "The code handles if the Assembly.Location is empty by calling AppContext.BaseDirectory. Workaround https://github.com/dotnet/runtime/issues/83607")]
-    private static string? ResolveRelativeToAssembly(IWebHostEnvironment environment)
+    private static string? ResolveRelativeToAssembly(Assembly assembly)
     {
-        if (string.IsNullOrEmpty(environment.ApplicationName))
-        {
-            return null;
-        }
-        var assembly = Assembly.Load(environment.ApplicationName);
         var assemblyLocation = assembly.Location;
-        var basePath = string.IsNullOrEmpty(assemblyLocation) ? AppContext.BaseDirectory : Path.GetDirectoryName(assemblyLocation);
-        return Path.Combine(basePath!, $"{environment.ApplicationName}.staticwebassets.runtime.json");
+        var basePath = string.IsNullOrEmpty(assemblyLocation) ? AppContext.BaseDirectory : 
+            Path.GetDirectoryName(assemblyLocation);
+
+        return Path.Combine(basePath!, $"{assembly.GetName().Name}.staticwebassets.runtime.json");
     }
+
+    //[UnconditionalSuppressMessage("SingleFile", "IL3000:Assembly.Location",
+    //    Justification = "The code handles if the Assembly.Location is empty by calling AppContext.BaseDirectory. Workaround https://github.com/dotnet/runtime/issues/83607")]
+    //private static string? ResolveRelativeToAssembly(IWebHostEnvironment environment)
+    //{
+    //    if (string.IsNullOrEmpty(environment.ApplicationName))
+    //    {
+    //        return null;
+    //    }
+    //    var assembly = Assembly.Load(environment.ApplicationName);
+    //    var assemblyLocation = assembly.Location;
+    //    var basePath = string.IsNullOrEmpty(assemblyLocation) ? AppContext.BaseDirectory : Path.GetDirectoryName(assemblyLocation);
+    //    return Path.Combine(basePath!, $"{environment.ApplicationName}.staticwebassets.runtime.json");
+    //}
 }
