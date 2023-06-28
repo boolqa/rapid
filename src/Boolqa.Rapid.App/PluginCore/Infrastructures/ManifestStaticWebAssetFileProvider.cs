@@ -151,6 +151,10 @@ internal sealed partial class ManifestStaticWebAssetFileProvider : IFileProvider
 
     public IFileInfo GetFileInfo(string subpath)
     {
+        // todo: надо сделать так, чтобы мы принимали _content/{имя плагина}/... и находили файлы, т.е если нашли это сочетание
+        // значит можно искать файлы дальше, убирая этот префикс, т.к они хранятся без него
+        // todo: надо сделать так, чтобы в Boolqa.Rapid.App.styles.css прописывались import'ы, чтобы стили загружались,
+        // повторяем по аналогии как сделано из коробки. Но по идее в этом смысла нет и проще сгенерить теги link в header сайта
         ArgumentNullException.ThrowIfNull(subpath);
 
         var segments = subpath.Split('/', StringSplitOptions.RemoveEmptyEntries);
