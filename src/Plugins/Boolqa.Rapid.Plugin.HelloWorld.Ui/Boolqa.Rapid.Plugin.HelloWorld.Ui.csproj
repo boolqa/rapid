@@ -4,8 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>enable</Nullable>
-	<OutputPath>..\..\Boolqa.Rapid.App\bin\$(Configuration)\$(TargetFramework)\plugins\$(MSBuildProjectName.Replace(".Ui", ""))</OutputPath>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<BaseOutputPath>bin\</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

@@ -14,12 +14,14 @@ siContainer.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
+System.Diagnostics.Debug.WriteLine($"App run in {builder.Environment.EnvironmentName} mode"); 
+
 // Add services to the container.
 var mvcBuilder = services.AddRazorPages();
 services.AddServerSideBlazor();
 services.AddSingleton<WeatherForecastService>();
 
-var pluginManager = new PluginLoaderManager();
+var pluginManager = new PluginLoaderManager(builder.Configuration, builder.Environment);
 var plugins = pluginManager.LoadPlugins();
 
 siContainer.Register<MainDbContextFactory>();

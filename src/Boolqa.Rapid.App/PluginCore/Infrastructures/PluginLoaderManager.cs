@@ -16,8 +16,10 @@ public class PluginLoaderManager
     private readonly string _pluginsFolder;
 
     private readonly Type[] _sharedTypes;
+    private readonly IConfiguration _configuration;
+    private readonly IHostEnvironment _hostEnvironment;
 
-    public PluginLoaderManager()
+    public PluginLoaderManager(IConfiguration configuration, IHostEnvironment hostEnvironment)
     {
         _pluginsFolder = Path.Combine(AppContext.BaseDirectory, "plugins");
         _sharedTypes = new Type[]
@@ -26,6 +28,8 @@ public class PluginLoaderManager
             typeof(IServiceCollection),
             typeof(IEntityTypeConfiguration<>)
         };
+        _configuration = configuration;
+        _hostEnvironment = hostEnvironment;
     }
 
     /// <summary>
@@ -36,8 +40,10 @@ public class PluginLoaderManager
     {
         var pluginSettings = new List<PluginConfig>(50);
 
+        var pluginFolders = GetPluginsFolders();
+
         // Читаем конфиги плагинов
-        foreach (var pluginFolderPath in Directory.GetDirectories(_pluginsFolder))
+        foreach (var pluginFolderPath in pluginFolders)
         {
             if (string.IsNullOrEmpty(pluginFolderPath))
             {
@@ -60,6 +66,34 @@ public class PluginLoaderManager
         }
 
         return pluginContexts;
+    }
+
+    private List<string> GetPluginsFolders()
+    {
+        var pluginFolders = new List<string>(1);
+
+        if (Directory.Exists(_pluginsFolder))
+        {
+            var folders = Directory.GetDirectories(_pluginsFolder);
+
+            if (folders != null)
+            {
+                pluginFolders.AddRange(folders);
+            }
+        }
+
+        var pluginsPaths = _configuration.GetSection("Plugins")?.Get<string[]>();
+
+        if (pluginsPaths != null)
+        {
+            foreach (var path in pluginsPaths)
+            {
+                var fullPath = Path.GetFullPath(path);
+                pluginFolders.Add(fullPath);
+            }
+        }
+
+        return pluginFolders;
     }
 
     /// <summary>
