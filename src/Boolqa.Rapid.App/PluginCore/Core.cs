@@ -7,13 +7,16 @@ namespace Boolqa.Rapid.App.PluginCore;
 
 public class Core : ICore
 {
-    private readonly MainDbContextFactory _contextFactory;
+    private readonly Lazy<MainDbContextFactory> _contextFactory;
 
     public Core(Container container)
     {
-        using var scope = AsyncScopedLifestyle.BeginScope(container);
-        _contextFactory = scope.GetRequiredService<MainDbContextFactory>();
+        _contextFactory = new Lazy<MainDbContextFactory>(() =>
+        {
+            using var scope = AsyncScopedLifestyle.BeginScope(container);
+            return scope.GetRequiredService<MainDbContextFactory>();
+        });
     }
 
-    public IDataContext GetNewDataContext() => new DataContext(_contextFactory.CreateNew());
+    public IDataContext GetNewDataContext() => new DataContext(_contextFactory.Value.CreateNew());
 }
