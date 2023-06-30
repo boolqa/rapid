@@ -173,6 +173,9 @@ public class PluginLoaderManager
 
 
         // todo: тут дописать для прод режима, чтобы брало фактическое имя папки
+        // Но возможно что надо разделить понятие физического пути и фактической папки, т.к пути в компонентах которые будем писать,
+        // должны работать одинаково в dev и prod средах
+
         //var folderName = Path.GetFileName(pluginConfig.PluginFolderPath).Trim('/');
         var folderName = mainLoadedAssembly.GetName().Name;
 
