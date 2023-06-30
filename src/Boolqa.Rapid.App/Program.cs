@@ -34,6 +34,7 @@ siContainer.Register(() =>
     return new MainDbContextFactory().CreateNew(entityRegister);
 });
 
+// todo: надо ли оно?
 mvcBuilder.AddUiPlugins(plugins);
 
 // см. страничку на вики SI для Blazor: https://docs.simpleinjector.org/en/latest/blazorintegration.html
@@ -49,6 +50,13 @@ services.AddSimpleInjector(siContainer, options =>
     //options.AddLogging();
     //options.AddLocalization();
 });
+
+var core = new Core(siContainer);
+var pluginHostManager = new PluginHostManager(plugins, core);
+// todo: регистрация через siContainer вызвало ошибку, что тип не зареган, whaaat?
+services.AddSingleton(sp => new BlazorPluginRenderer(pluginHostManager));
+
+await pluginHostManager.Initialize();
 
 var app = builder.Build();
 
@@ -68,11 +76,6 @@ app.Services.UseSimpleInjector(siContainer);
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
-var core = new Core(siContainer);
-var pluginHostManager = new PluginHostManager(plugins, core);
-
-await pluginHostManager.Initialize();
 
 siContainer.Verify();
 siContainer.ApplyMigrations<MainDbContext>(isResetDb: true);

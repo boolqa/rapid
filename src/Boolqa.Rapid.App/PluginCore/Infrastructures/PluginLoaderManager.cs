@@ -171,14 +171,20 @@ public class PluginLoaderManager
             // Возможно где-то тут надо будет подгружать сборки для реализации плагинов зависящих от других плагинов
         }
 
+
+        // todo: тут дописать для прод режима, чтобы брало фактическое имя папки
+        //var folderName = Path.GetFileName(pluginConfig.PluginFolderPath).Trim('/');
+        var folderName = mainLoadedAssembly.GetName().Name;
+
         // todo: тут дописать для прод режима, чтобы создавало провайдер до wwwroot папки плагина
         var assetLoader = new PluginWebAssetsLoader();
-        var resourceProvider = assetLoader.LoadStaticWebAssets(_hostEnvironment, _configuration, mainLoadedAssembly);
+        var resourceProvider = assetLoader.LoadStaticWebAssets(_hostEnvironment, _configuration, 
+            mainLoadedAssembly, folderName!);
 
         var pluginContext = new PluginLoadContext()
         {
             FolderPath = pluginConfig.PluginFolderPath,
-            FolderName = Path.GetFileName(pluginConfig.PluginFolderPath),
+            FolderName = folderName,
             ConfigurationRoot = pluginConfig.Configuration,
             Settings = pluginConfig.Settings,
             IsUiSeparated = isUiSeparated,

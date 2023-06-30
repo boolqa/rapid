@@ -4,13 +4,13 @@ namespace Boolqa.Rapid.App.PluginCore.Infrastructures;
 
 public class PluginHost
 {
-    public PluginLoadContext PluginInfo { get; }
+    public PluginLoadContext Context { get; }
 
     public IPlugin Plugin { get; }
 
     public PluginHost(PluginLoadContext pluginInfo, IPlugin plugin)
     {
-        PluginInfo = pluginInfo;
+        Context = pluginInfo;
         Plugin = plugin;
     }
 }

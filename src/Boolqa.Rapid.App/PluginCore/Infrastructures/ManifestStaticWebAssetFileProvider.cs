@@ -19,8 +19,11 @@ internal sealed partial class ManifestStaticWebAssetFileProvider : IFileProvider
 
     private readonly IFileProvider[] _fileProviders;
     private readonly StaticWebAssetNode _root;
+    private readonly string _pluginFolderName;
 
-    public ManifestStaticWebAssetFileProvider(StaticWebAssetManifest manifest, Func<string, IFileProvider> fileProviderFactory)
+    public ManifestStaticWebAssetFileProvider(string pluginFolderName,
+        StaticWebAssetManifest manifest, 
+        Func<string, IFileProvider> fileProviderFactory)
     {
         _fileProviders = new IFileProvider[manifest.ContentRoots.Length];
 
@@ -30,6 +33,7 @@ internal sealed partial class ManifestStaticWebAssetFileProvider : IFileProvider
         }
 
         _root = manifest.Root;
+        _pluginFolderName = pluginFolderName;
     }
 
     // For testing purposes only
@@ -160,6 +164,18 @@ internal sealed partial class ManifestStaticWebAssetFileProvider : IFileProvider
         var segments = subpath.Split('/', StringSplitOptions.RemoveEmptyEntries);
         StaticWebAssetNode? candidate = _root;
         List<StaticWebAssetPattern>? patterns = null;
+
+        // Путь должен состоять из названия папки плагинов + папка плагина как минимум
+        if (segments.Length < 2
+        // todo: plugins тянуть из конфигуратора загрузчика плагинов
+            || !segments[0].Equals("plugins", StringComparison.OrdinalIgnoreCase)
+            || !segments[1].Equals(_pluginFolderName, StringComparison.OrdinalIgnoreCase))
+        {
+            return new NotFoundFileInfo(subpath);
+        }
+
+        // todo: можно оптимальнее написать
+        segments = segments.Skip(2).ToArray();
 
         // Iterate over the path segments until we reach the destination, collecting
         // all pattern candidates along the way except for any pattern at the root.

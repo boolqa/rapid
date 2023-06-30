@@ -12,7 +12,7 @@ public class PluginWebAssetsLoader
     /// <param name="environment">The application <see cref="IWebHostEnvironment"/>.</param>
     /// <param name="configuration">The host <see cref="IConfiguration"/>.</param>
     internal ManifestStaticWebAssetFileProvider? LoadStaticWebAssets(IWebHostEnvironment environment,
-        IConfiguration configuration, Assembly assembly)
+        IConfiguration configuration, Assembly assembly, string pluginFolderName)
     {
         var manifest = ResolveManifest(environment, configuration, assembly);
         if (manifest == null)
@@ -22,18 +22,19 @@ public class PluginWebAssetsLoader
 
         using (manifest)
         {
-            return GetStaticWebAssetsCore(environment, manifest);
+            return GetStaticWebAssetsCore(environment, manifest, pluginFolderName);
         }
     }
 
-    internal static ManifestStaticWebAssetFileProvider GetStaticWebAssetsCore(IWebHostEnvironment environment, Stream manifest)
+    internal static ManifestStaticWebAssetFileProvider GetStaticWebAssetsCore(IWebHostEnvironment environment, 
+        Stream manifest, string pluginFolderName)
     {
         var staticWebAssetManifest = ManifestStaticWebAssetFileProvider.StaticWebAssetManifest.Parse(manifest);
         var provider = new ManifestStaticWebAssetFileProvider(
+            pluginFolderName,
             staticWebAssetManifest,
             (contentRoot) => new PhysicalFileProvider(contentRoot));
 
-        //environment.WebRootFileProvider = new CompositeFileProvider(new[] { provider, environment.WebRootFileProvider });
         return provider;
     }
 

@@ -10,6 +10,11 @@ public class PluginHostManager
 
     private readonly Core _core;
 
+    public IReadOnlyCollection<PluginHost> PluginHosts => _pluginHosts.AsReadOnly();
+
+    // todo: надо реализовать фильтр для выборки только ui плагинов
+    public IReadOnlyCollection<PluginHost> OnlyUiPluginHosts => _pluginHosts.AsReadOnly();
+
     public PluginHostManager(IEnumerable<PluginLoadContext> pluginLoadInfos, Core core)
     {
         _pluginLoadInfos = pluginLoadInfos
@@ -29,7 +34,7 @@ public class PluginHostManager
 
             await pluginHost.Plugin.Initialize();
 
-            Console.WriteLine($"Initialized plugin '{pluginHost.PluginInfo?.Settings?.PluginName}'");
+            Console.WriteLine($"Initialized plugin '{pluginHost.Context?.Settings?.PluginName}'");
         }
     }
 
@@ -39,7 +44,7 @@ public class PluginHostManager
         {
             await pluginHost.Plugin.Run();
 
-            Console.WriteLine($"Runed plugin '{pluginHost.PluginInfo?.Settings?.PluginName}'");
+            Console.WriteLine($"Runed plugin '{pluginHost.Context?.Settings?.PluginName}'");
         }
     }
 

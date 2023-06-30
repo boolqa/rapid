@@ -35,4 +35,7 @@ public class Plugin : IPlugin
 
         await ForTest.Instance.CreateTestObject("run");
     }
+
+    // todo: надо в IPlugin заложить возможность передавать названия js скриптов, которые должны быть загружены в хосте / или мб только на страницах
+    // плагина? но тогда это можно сделать через HeaderContent атрибуты
 }
