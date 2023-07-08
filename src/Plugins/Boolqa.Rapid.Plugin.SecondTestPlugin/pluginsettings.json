@@ -1,0 +1,8 @@
+{
+  "PluginId": "3267AA7B-DDE5-4BAC-ACD0-87CE79A58F06",
+  "PluginName": "SecondTestPlugin",
+  "PluginDescription": "Plugin for developing plugin core api",
+  "PluginAuthor": "Boolqa",
+  "PluginType": "Together",
+  "PluginDll": "Boolqa.Rapid.Plugin.SecondTestPlugin"
+}

@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Infrastructures.CSha
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SecondTestPlugin", "SecondTestPlugin", "{1C05A4C7-C07B-44F1-9B02-601096B79EF2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boolqa.Rapid.Plugin.SecondTestPlugin", "Plugins\Boolqa.Rapid.Plugin.SecondTestPlugin\Boolqa.Rapid.Plugin.SecondTestPlugin.csproj", "{1641B1B5-0589-4532-A2AC-7F10E624736D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +62,10 @@ Global
 		{BD8B6A94-6255-4D4B-9D57-B5FABEC21C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD8B6A94-6255-4D4B-9D57-B5FABEC21C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD8B6A94-6255-4D4B-9D57-B5FABEC21C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1641B1B5-0589-4532-A2AC-7F10E624736D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1641B1B5-0589-4532-A2AC-7F10E624736D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1641B1B5-0589-4532-A2AC-7F10E624736D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1641B1B5-0589-4532-A2AC-7F10E624736D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{EFFEC0C6-549A-4960-91A8-50BE2C171767} = {7C3D654A-3D0E-42A8-8C73-F3D9A765F17E}
 		{A37B920B-2720-40A6-944F-D80878DF0D48} = {EFFEC0C6-549A-4960-91A8-50BE2C171767}
 		{1C05A4C7-C07B-44F1-9B02-601096B79EF2} = {7C3D654A-3D0E-42A8-8C73-F3D9A765F17E}
+		{1641B1B5-0589-4532-A2AC-7F10E624736D} = {1C05A4C7-C07B-44F1-9B02-601096B79EF2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A4E3E1E-4147-4FCA-858B-F9CCC93B22D7}

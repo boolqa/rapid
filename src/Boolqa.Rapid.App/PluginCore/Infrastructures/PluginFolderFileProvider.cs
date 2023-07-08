@@ -28,6 +28,8 @@ public class PluginFolderFileProvider : IFileProvider
 
     public IFileInfo GetFileInfo(string subpath)
     {
+        Console.WriteLine($"GetFileInfo {subpath} from {_pluginFolderName}");
+
         var filePath = GetRealPath(subpath);
 
         if (filePath is null)
