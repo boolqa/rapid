@@ -188,7 +188,12 @@ public class PluginLoaderManager
 
         IFileProvider? resourceProvider;
 
-        // todo: тут дописать для прод режима, чтобы создавало провайдер до wwwroot папки плагина
+        // futurebugfix: Если возникнет проблема при загрузке ресурсов для разных плагинов, один плагин может вернуть признак отсутствия файла
+        // а другой провайдер ресурсов нужного плагина не будет вызван, решение проблемы описывается тут:
+        // https://stackoverflow.com/questions/42382081/asp-net-core-custom-ifileprovider-prevents-default-ifileprovider-from-working
+        
+        // optimization: Возможно стоит написать свой кастомный композитный провайдер ресурсов, чтобы он мог по началу пути файла
+        // быстро определять в какой провайдер ему сходить и не опрашивать провайдеры всех плагинов
         if (_isDeveloperModeLoad)
         {
             var assetLoader = new PluginWebAssetsLoader();
