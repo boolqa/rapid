@@ -14,7 +14,14 @@ siContainer.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
-System.Diagnostics.Debug.WriteLine($"App run in {builder.Environment.EnvironmentName} mode"); 
+Console.WriteLine($"App run in {builder.Environment.EnvironmentName} mode");
+
+// todo: Эту штуку через конфиг включать, на случай отладки старта приложения не в режиме разработчика
+if (!builder.Environment.IsDevelopment())
+{
+    Console.WriteLine("Press any key to continue app run");
+    Console.ReadLine();
+}
 
 // Add services to the container.
 var mvcBuilder = services.AddRazorPages();
@@ -35,7 +42,7 @@ siContainer.Register(() =>
     return new MainDbContextFactory().CreateNew(entityRegister);
 });
 
-// todo: надо ли оно?
+// todo: Этот метод нужен, но его стоит перенести в логику загрузчика, чтобы все было по полочкам
 mvcBuilder.AddUiPlugins(plugins);
 
 // см. страничку на вики SI для Blazor: https://docs.simpleinjector.org/en/latest/blazorintegration.html
