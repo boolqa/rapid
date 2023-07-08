@@ -1,6 +1,6 @@
 using Boolqa.Rapid.PluginCore;
 
-namespace Boolqa.Rapid.Plugin.HelloWorld;
+namespace Boolqa.Rapid.Plugin.FirstTestPlugin;
 
 public class Plugin : IPlugin
 {
@@ -16,12 +16,12 @@ public class Plugin : IPlugin
 
     public async Task Initialize()
     {
-        Console.WriteLine("Initialized Boolqa.Rapid.Plugin.HelloWorld");
+        Console.WriteLine("Initialized Boolqa.Rapid.Plugin.FirstTestPlugin");
     }
 
     public async Task Run()
     {
-        Console.WriteLine("runned Boolqa.Rapid.Plugin.HelloWorld");
+        Console.WriteLine("runned Boolqa.Rapid.Plugin.FirstTestPlugin");
 
         //using var data = _core.GetNewDataContext();
 

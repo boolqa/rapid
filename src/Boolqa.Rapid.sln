@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{7C3D
 		Docs\plugins_readme.txt = Docs\plugins_readme.txt
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Rapid.Plugin.HelloWorld", "Plugins\Boolqa.Rapid.Plugin.HelloWorld\Boolqa.Rapid.Plugin.HelloWorld.csproj", "{146C420E-3F00-473F-942A-91CA643499F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Rapid.Plugin.FirstTestPlugin", "Plugins\Boolqa.Rapid.Plugin.FirstTestPlugin\Boolqa.Rapid.Plugin.FirstTestPlugin.csproj", "{146C420E-3F00-473F-942A-91CA643499F6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{3EF02D42-A79E-4A75-BCDB-C79C185423F6}"
 EndProject
@@ -22,11 +22,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Rapid.App", "Boolqa.
 		{A37B920B-2720-40A6-944F-D80878DF0D48} = {A37B920B-2720-40A6-944F-D80878DF0D48}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HelloWorld", "HelloWorld", "{EFFEC0C6-549A-4960-91A8-50BE2C171767}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FirstTestPlugin", "FirstTestPlugin", "{EFFEC0C6-549A-4960-91A8-50BE2C171767}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Rapid.Plugin.HelloWorld.Ui", "Plugins\Boolqa.Rapid.Plugin.HelloWorld.Ui\Boolqa.Rapid.Plugin.HelloWorld.Ui.csproj", "{A37B920B-2720-40A6-944F-D80878DF0D48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Rapid.Plugin.FirstTestPlugin.Ui", "Plugins\Boolqa.Rapid.Plugin.FirstTestPlugin.Ui\Boolqa.Rapid.Plugin.FirstTestPlugin.Ui.csproj", "{A37B920B-2720-40A6-944F-D80878DF0D48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boolqa.Infrastructures.CSharp", "Boolqa.Infrastructures.CSharp\Boolqa.Infrastructures.CSharp.csproj", "{BD8B6A94-6255-4D4B-9D57-B5FABEC21C1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boolqa.Infrastructures.CSharp", "Boolqa.Infrastructures.CSharp\Boolqa.Infrastructures.CSharp.csproj", "{BD8B6A94-6255-4D4B-9D57-B5FABEC21C1A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SecondTestPlugin", "SecondTestPlugin", "{1C05A4C7-C07B-44F1-9B02-601096B79EF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,7 @@ Global
 		{9DBF58FB-961F-420E-80CA-462C4690E35A} = {3EF02D42-A79E-4A75-BCDB-C79C185423F6}
 		{EFFEC0C6-549A-4960-91A8-50BE2C171767} = {7C3D654A-3D0E-42A8-8C73-F3D9A765F17E}
 		{A37B920B-2720-40A6-944F-D80878DF0D48} = {EFFEC0C6-549A-4960-91A8-50BE2C171767}
+		{1C05A4C7-C07B-44F1-9B02-601096B79EF2} = {7C3D654A-3D0E-42A8-8C73-F3D9A765F17E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A4E3E1E-4147-4FCA-858B-F9CCC93B22D7}

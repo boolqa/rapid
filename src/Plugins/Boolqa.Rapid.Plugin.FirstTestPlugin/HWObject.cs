@@ -1,6 +1,6 @@
 ﻿using Boolqa.Rapid.PluginCore.Data;
 
-namespace Boolqa.Rapid.Plugin.HelloWorld;
+namespace Boolqa.Rapid.Plugin.FirstTestPlugin;
 
 public partial class HWObject : CoreObject
 {

@@ -199,7 +199,7 @@ namespace Boolqa.Rapid.App.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Boolqa.Rapid.Plugin.HelloWorld.HWObject", b =>
+            modelBuilder.Entity("Boolqa.Rapid.Plugin.FirstTestPlugin.HWObject", b =>
                 {
                     b.HasBaseType("Boolqa.Rapid.PluginCore.Data.CoreObject");
 
@@ -339,11 +339,11 @@ namespace Boolqa.Rapid.App.Data.Migrations
                     b.Navigation("Tenant");
                 });
 
-            modelBuilder.Entity("Boolqa.Rapid.Plugin.HelloWorld.HWObject", b =>
+            modelBuilder.Entity("Boolqa.Rapid.Plugin.FirstTestPlugin.HWObject", b =>
                 {
                     b.HasOne("Boolqa.Rapid.PluginCore.Data.CoreObject", null)
                         .WithOne()
-                        .HasForeignKey("Boolqa.Rapid.Plugin.HelloWorld.HWObject", "ObjectId")
+                        .HasForeignKey("Boolqa.Rapid.Plugin.FirstTestPlugin.HWObject", "ObjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

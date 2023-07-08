@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Boolqa.Rapid.Plugin.HelloWorld;
+namespace Boolqa.Rapid.Plugin.FirstTestPlugin;
 
-public class HelloWorldConfiguration : IEntityTypeConfiguration<HWObject>
+public class FirstTestPluginConfiguration : IEntityTypeConfiguration<HWObject>
 {
     public void Configure(EntityTypeBuilder<HWObject> builder)
     {

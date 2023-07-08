@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Boolqa.Rapid.PluginCore;
 
-namespace Boolqa.Rapid.Plugin.HelloWorld;
+namespace Boolqa.Rapid.Plugin.FirstTestPlugin;
 public class ForTest
 {
     public static ForTest Instance { get; private set; }

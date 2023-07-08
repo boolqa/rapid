@@ -1,6 +1,6 @@
 using Microsoft.JSInterop;
 
-namespace Boolqa.Rapid.Plugin.HelloWorld.Ui
+namespace Boolqa.Rapid.Plugin.FirstTestPlugin.Ui
 {
     // This class provides an example of how JavaScript functionality can be wrapped
     // in a .NET class for easy consumption. The associated JavaScript module is
@@ -16,7 +16,7 @@ namespace Boolqa.Rapid.Plugin.HelloWorld.Ui
         public ExampleJsInterop(IJSRuntime jsRuntime)
         {
             moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-                "import", "./_content/Boolqa.Rapid.Plugin.HelloWorld.Ui/exampleJsInterop.js").AsTask());
+                "import", "./Boolqa.Rapid.Plugin.FirstTestPlugin.Ui/exampleJsInterop.js").AsTask());
         }
 
         public async ValueTask<string> Prompt(string message)

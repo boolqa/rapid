@@ -1,9 +1,9 @@
 {
   "PluginId": "CE7AC6C8-89A8-4CC2-ADED-1C29298E856D",
-  "PluginName": "HelloWorld",
+  "PluginName": "FirstTestPlugin",
   "PluginDescription": "Plugin for developing plugin core api",
   "PluginAuthor": "Boolqa",
   "PluginType": "Together",
-  "PluginDll": "Boolqa.Rapid.Plugin.HelloWorld",
-  "SeparateUiDll": "Boolqa.Rapid.Plugin.HelloWorld.Ui"
+  "PluginDll": "Boolqa.Rapid.Plugin.FirstTestPlugin",
+  "SeparateUiDll": "Boolqa.Rapid.Plugin.FirstTestPlugin.Ui"
 }

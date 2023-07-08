@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Boolqa.Rapid.Plugin.HelloWorld\Boolqa.Rapid.Plugin.HelloWorld.csproj" />
+    <ProjectReference Include="..\Boolqa.Rapid.Plugin.FirstTestPlugin\Boolqa.Rapid.Plugin.FirstTestPlugin.csproj" />
   </ItemGroup>
 
 </Project>
