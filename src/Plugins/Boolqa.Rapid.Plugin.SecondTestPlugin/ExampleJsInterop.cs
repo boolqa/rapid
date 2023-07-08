@@ -1,6 +1,6 @@
 using Microsoft.JSInterop;
 
-namespace Boolqa.Rapid.SecondTestPlugin;
+namespace Boolqa.Rapid.Plugin.SecondTestPlugin;
 // This class provides an example of how JavaScript functionality can be wrapped
 // in a .NET class for easy consumption. The associated JavaScript module is
 // loaded on demand when first needed.
@@ -15,7 +15,7 @@ public class ExampleJsInterop : IAsyncDisposable
     public ExampleJsInterop(IJSRuntime jsRuntime)
     {
         moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-            "import", "./Boolqa.Rapid.SecondTestPlugin/exampleJsInterop.js").AsTask());
+            "import", "./Boolqa.Rapid.Plugin.SecondTestPlugin/exampleJsInterop.js").AsTask());
     }
 
     public async ValueTask<string> Prompt(string message)
