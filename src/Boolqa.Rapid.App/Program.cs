@@ -21,7 +21,8 @@ var mvcBuilder = services.AddRazorPages();
 services.AddServerSideBlazor();
 services.AddSingleton<WeatherForecastService>();
 
-var pluginManager = new PluginLoaderManager(builder.Configuration, builder.Environment);
+var pluginManager = new PluginLoaderManager(builder.Configuration, builder.Environment, 
+    builder.Environment.IsDevelopment());
 var plugins = pluginManager.LoadPlugins();
 
 siContainer.Register<MainDbContextFactory>();

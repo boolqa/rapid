@@ -2,6 +2,7 @@
 using System.Reflection;
 using Boolqa.Rapid.PluginCore.Models;
 using McMaster.NETCore.Plugins;
+using Microsoft.Extensions.FileProviders;
 
 namespace Boolqa.Rapid.App.PluginCore.Infrastructures;
 
@@ -53,5 +54,5 @@ public record PluginLoadContext
     /// <summary>
     /// Провайдер для загрузки ресурсов плагина.
     /// </summary>
-    internal ManifestStaticWebAssetFileProvider? ResourceFileProvider { get; init; }
+    internal IFileProvider? ResourceFileProvider { get; init; }
 }

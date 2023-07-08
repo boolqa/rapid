@@ -12,7 +12,7 @@ internal class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<MainDbCo
     public MainDbContext CreateDbContext(string[] args)
     {
         // todo fix pass null, надо создать хост приложения
-        var assemblies = new PluginLoaderManager(null, null)
+        var assemblies = new PluginLoaderManager(null, null, true)
             .LoadPlugins()
             .SelectMany(p => p.LoadedAssemblies);
 

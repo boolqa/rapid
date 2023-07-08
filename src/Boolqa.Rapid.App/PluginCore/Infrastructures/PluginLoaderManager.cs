@@ -3,6 +3,7 @@ using System.Reflection;
 using Boolqa.Rapid.PluginCore;
 using Boolqa.Rapid.PluginCore.Models;
 using McMaster.NETCore.Plugins;
+using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 
@@ -20,18 +21,25 @@ public class PluginLoaderManager
     private readonly Type[] _sharedTypes;
     private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _hostEnvironment;
+    private readonly bool _isDeveloperModeLoad;
 
-    public PluginLoaderManager(IConfiguration configuration, IWebHostEnvironment hostEnvironment)
+    public PluginLoaderManager(IConfiguration configuration, IWebHostEnvironment hostEnvironment,
+        bool isDeveloperModeLoad)
     {
         _pluginsFolder = Path.Combine(AppContext.BaseDirectory, "plugins");
         _sharedTypes = new Type[]
         {
             typeof(IPlugin),
             typeof(IServiceCollection),
-            typeof(IEntityTypeConfiguration<>)
+            typeof(IEntityTypeConfiguration<>),
+            typeof(ComponentBase),
+            typeof(IComponent),
+            typeof(IHandleEvent),
+            typeof(IHandleAfterRender)
         };
         _configuration = configuration;
         _hostEnvironment = hostEnvironment;
+        _isDeveloperModeLoad = isDeveloperModeLoad;
     }
 
     /// <summary>
@@ -171,7 +179,6 @@ public class PluginLoaderManager
             // Возможно где-то тут надо будет подгружать сборки для реализации плагинов зависящих от других плагинов
         }
 
-
         // todo: тут дописать для прод режима, чтобы брало фактическое имя папки
         // Но возможно что надо разделить понятие физического пути и фактической папки, т.к пути в компонентах которые будем писать,
         // должны работать одинаково в dev и prod средах
@@ -179,10 +186,19 @@ public class PluginLoaderManager
         //var folderName = Path.GetFileName(pluginConfig.PluginFolderPath).Trim('/');
         var folderName = mainLoadedAssembly.GetName().Name;
 
+        IFileProvider? resourceProvider;
+
         // todo: тут дописать для прод режима, чтобы создавало провайдер до wwwroot папки плагина
-        var assetLoader = new PluginWebAssetsLoader();
-        var resourceProvider = assetLoader.LoadStaticWebAssets(_hostEnvironment, _configuration, 
-            mainLoadedAssembly, folderName!);
+        if (_isDeveloperModeLoad)
+        {
+            var assetLoader = new PluginWebAssetsLoader();
+            resourceProvider = assetLoader.LoadStaticWebAssets(_hostEnvironment, _configuration,
+                mainLoadedAssembly, folderName!);
+        }
+        else
+        {
+            resourceProvider = new PluginFolderFileProvider(folderName!, pluginConfig.PluginFolderPath);
+        }
 
         var pluginContext = new PluginLoadContext()
         {
@@ -221,6 +237,9 @@ public class PluginLoaderManager
             // Тут передаются те типы, которые должны проходить сквозь изоляцию конекста, см. доку DotNetCorePlugins
             // Даже одноименные типы по умолчанию будут считаться как самостоятельный тип
             sharedTypes: _sharedTypes,
+            // todo: Проблемы с шарингом кода можно решить через 2 свойства ниже, чтобы не перечислять все типы
+            // SharedAssemblies = ,
+            // PrivateAssemblies = ,
             configure: c =>
             {
                 // Тут можно задать AssemblyLoadContext, если буду проблемы с загрузкой
