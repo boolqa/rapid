@@ -23,17 +23,17 @@ public class Plugin : IPlugin
     {
         Console.WriteLine("runned Boolqa.Rapid.Plugin.HelloWorld");
 
-        using var data = _core.GetNewDataContext();
+        //using var data = _core.GetNewDataContext();
 
-        data.CoreObjectService.Value.Add(new HWObject(null, 
-            new Guid("63D26DF9-0E3F-4E00-8187-1A5F7B000001"), "Test object HelloWorld", "HelloWorld text")
-        {
-            Description = "Test object descript"
-        });
+        //data.CoreObjectService.Value.Add(new HWObject(null, 
+        //    new Guid("63D26DF9-0E3F-4E00-8187-1A5F7B000001"), "Test object HelloWorld", "HelloWorld text")
+        //{
+        //    Description = "Test object descript"
+        //});
 
-        var resSave = await data.SaveChanges();
+        //var resSave = await data.SaveChanges();
 
-        await ForTest.Instance.CreateTestObject("run");
+        //await ForTest.Instance.CreateTestObject("run");
     }
 
     // todo: надо в IPlugin заложить возможность передавать названия js скриптов, которые должны быть загружены в хосте / или мб только на страницах

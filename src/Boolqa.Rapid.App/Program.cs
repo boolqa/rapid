@@ -79,7 +79,11 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 siContainer.Verify();
-siContainer.ApplyMigrations<MainDbContext>(isResetDb: true);
+
+//if (builder.Environment.IsDevelopment())
+//{
+    siContainer.ApplyMigrations<MainDbContext>(isResetDb: true);
+//}
 
 await pluginHostManager.Run();
 
