@@ -3,15 +3,19 @@ using Microsoft.Extensions.Primitives;
 
 namespace Boolqa.Rapid.App.PluginCore.Infrastructures;
 
-public class PluginFolderFileProvider : IFileProvider
+public class PluginFolderFileProvider : IPluginFileProvider
 {
     private readonly string _pluginFolderName;
+    private readonly DirectoryInfo _rootFolderPath;
     private readonly PhysicalFileProvider _physicalFileProvider;
 
-    public PluginFolderFileProvider(string pluginFolderName, string rootFolderPath)
+    public string PluginFolderName => _pluginFolderName;
+
+    public PluginFolderFileProvider(string pluginFolderName, DirectoryInfo rootFolderPath)
     {
         _pluginFolderName = pluginFolderName;
-        _physicalFileProvider = new PhysicalFileProvider(rootFolderPath + "/wwwroot");
+        _rootFolderPath = rootFolderPath;
+        _physicalFileProvider = new PhysicalFileProvider(rootFolderPath.FullName + "/wwwroot");
     }
 
     public IDirectoryContents GetDirectoryContents(string subpath)

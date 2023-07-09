@@ -14,7 +14,7 @@ public record PluginLoadContext
     /// <summary>
     /// Путь до папки плагина.
     /// </summary>
-    public required string FolderPath { get; init; }
+    public required DirectoryInfo FolderPath { get; init; }
 
     /// <summary>
     /// Имя папки плагина.
@@ -54,5 +54,5 @@ public record PluginLoadContext
     /// <summary>
     /// Провайдер для загрузки ресурсов плагина.
     /// </summary>
-    internal IFileProvider? ResourceFileProvider { get; init; }
+    internal IPluginFileProvider? ResourceFileProvider { get; init; }
 }

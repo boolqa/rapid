@@ -9,7 +9,7 @@ using System.Collections;
 
 namespace Boolqa.Rapid.App.PluginCore.Infrastructures;
 
-internal sealed partial class ManifestStaticWebAssetFileProvider : IFileProvider
+internal sealed partial class ManifestStaticWebAssetFileProvider : IPluginFileProvider
 {
     private static readonly StringComparison _fsComparison = OperatingSystem.IsWindows() ?
         StringComparison.OrdinalIgnoreCase :
@@ -20,6 +20,8 @@ internal sealed partial class ManifestStaticWebAssetFileProvider : IFileProvider
     private readonly IFileProvider[] _fileProviders;
     private readonly StaticWebAssetNode _root;
     private readonly string _pluginFolderName;
+
+    public string PluginFolderName => _pluginFolderName;
 
     public ManifestStaticWebAssetFileProvider(string pluginFolderName,
         StaticWebAssetManifest manifest, 

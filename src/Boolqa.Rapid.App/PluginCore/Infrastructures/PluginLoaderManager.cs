@@ -12,7 +12,7 @@ namespace Boolqa.Rapid.App.PluginCore.Infrastructures;
 public class PluginLoaderManager
 {
     public record PluginConfig(
-        string PluginFolderPath,
+        DirectoryInfo PluginFolderPath,
         IConfigurationRoot Configuration,
         PluginSettings Settings);
 
@@ -82,8 +82,10 @@ public class PluginLoaderManager
 
         if (resourcesProviders != null)
         {
-            var providers = resourcesProviders.Prepend(_hostEnvironment.WebRootFileProvider);
-            _hostEnvironment.WebRootFileProvider = new CompositeFileProvider(providers!);
+            var pluginsFileProvider = new PluginsCompositeFileProvider(_hostEnvironment.WebRootFileProvider,
+                resourcesProviders!);
+
+            _hostEnvironment.WebRootFileProvider = pluginsFileProvider;
         }
 
         return pluginContexts;
@@ -143,7 +145,7 @@ public class PluginLoaderManager
         settings.PluginDll = settings.PluginDll.Replace(".dll", "", StringComparison.OrdinalIgnoreCase);
         settings.SeparateUiDll = settings.SeparateUiDll?.Replace(".dll", "", StringComparison.OrdinalIgnoreCase);
 
-        return new PluginConfig(pluginFolderPath, rootConfig, settings);
+        return new PluginConfig(new DirectoryInfo(pluginFolderPath), rootConfig, settings);
     }
 
     /// <summary>
@@ -186,12 +188,12 @@ public class PluginLoaderManager
         //var folderName = Path.GetFileName(pluginConfig.PluginFolderPath).Trim('/');
         var folderName = mainLoadedAssembly.GetName().Name;
 
-        IFileProvider? resourceProvider;
+        IPluginFileProvider? resourceProvider;
 
         // futurebugfix: Если возникнет проблема при загрузке ресурсов для разных плагинов, один плагин может вернуть признак отсутствия файла
         // а другой провайдер ресурсов нужного плагина не будет вызван, решение проблемы описывается тут:
         // https://stackoverflow.com/questions/42382081/asp-net-core-custom-ifileprovider-prevents-default-ifileprovider-from-working
-        
+
         // todo: Надо написать свой кастомный композитный провайдер ресурсов, чтобы он мог по началу пути файла
         // быстро определять в какой провайдер ему сходить и не опрашивать провайдеры всех плагинов.
         // Проверил опытным путем, данная проблема пристутствует. Получается чтение файлов будет тормозить с ростом числа ui плагинов
@@ -261,5 +263,5 @@ public class PluginLoaderManager
     }
 
     private string GetDllPath(string dllName, PluginConfig pluginLoadSetting) =>
-        Path.Combine(pluginLoadSetting.PluginFolderPath, dllName + ".dll");
+        Path.Combine(pluginLoadSetting.PluginFolderPath.FullName, dllName + ".dll");
 }
