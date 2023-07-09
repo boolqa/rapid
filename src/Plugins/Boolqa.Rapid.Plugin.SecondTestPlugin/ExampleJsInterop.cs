@@ -15,7 +15,7 @@ public class ExampleJsInterop : IAsyncDisposable
     public ExampleJsInterop(IJSRuntime jsRuntime)
     {
         moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-            "import", "./Boolqa.Rapid.Plugin.SecondTestPlugin/exampleJsInterop.js").AsTask());
+            "import", "plugins/Boolqa.Rapid.Plugin.SecondTestPlugin/exampleJsInterop.js").AsTask());
     }
 
     public async ValueTask<string> Prompt(string message)

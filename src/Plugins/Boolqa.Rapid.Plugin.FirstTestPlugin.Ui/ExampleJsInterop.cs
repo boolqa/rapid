@@ -16,7 +16,7 @@ namespace Boolqa.Rapid.Plugin.FirstTestPlugin.Ui
         public ExampleJsInterop(IJSRuntime jsRuntime)
         {
             moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-                "import", "./Boolqa.Rapid.Plugin.FirstTestPlugin.Ui/exampleJsInterop.js").AsTask());
+                "import", "plugins/Boolqa.Rapid.Plugin.FirstTestPlugin.Ui/exampleJsInterop.js").AsTask());
         }
 
         public async ValueTask<string> Prompt(string message)
